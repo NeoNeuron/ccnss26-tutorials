@@ -23,3 +23,6 @@ checkpoints/
 # Slides (intermediate)
 *.key.bak
 ~$*
+
+CLAUDE.md
+.claude/

@@ -7,7 +7,7 @@ networkx==3.3
 allensdk==2.16.2
 dandi==0.62.4
 pynwb==2.8.1
-ssm @ git+https://github.com/lindermanlab/ssm.git@2024-stable
+ssm @ git+https://github.com/lindermanlab/ssm.git@master
 nbformat==5.10.4
 nbconvert==7.16.4
 pytest==8.2.2
