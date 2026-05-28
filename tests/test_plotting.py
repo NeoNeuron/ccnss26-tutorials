@@ -4,6 +4,7 @@ matplotlib.use("Agg")
 import numpy as np
 import matplotlib.figure
 from ccnss_helpers import plotting
+import networkx as nx
 
 
 def test_plot_raster_returns_figure():
@@ -23,3 +24,17 @@ def test_plot_psth_returns_figure():
     ax = fig.axes[0]
     assert ax.get_xlabel() != ""
     assert ax.get_ylabel() != ""
+
+
+def test_plot_network_returns_figure():
+    G = nx.erdos_renyi_graph(20, 0.2, seed=0)
+    fig = plotting.plot_network(G, node_color="black")
+    assert isinstance(fig, matplotlib.figure.Figure)
+
+
+def test_plot_latents_3d_returns_figure():
+    latents = np.random.RandomState(0).randn(8, 100, 3)  # conditions x time x dims
+    fig = plotting.plot_latents_3d(latents)
+    assert isinstance(fig, matplotlib.figure.Figure)
+    # Should be a single 3D axis.
+    assert fig.axes[0].name == "3d"

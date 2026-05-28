@@ -50,3 +50,50 @@ def plot_psth(
     if label:
         ax.legend()
     return fig
+
+
+def plot_network(
+    G,
+    *,
+    node_color="C0",
+    node_size: int = 30,
+    edge_alpha: float = 0.4,
+    ax=None,
+) -> Figure:
+    """Plot a networkx graph with spring layout."""
+    import networkx as nx
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(6, 6))
+    else:
+        fig = ax.figure
+    pos = nx.spring_layout(G, seed=0)
+    nx.draw_networkx_nodes(G, pos, ax=ax, node_color=node_color, node_size=node_size)
+    nx.draw_networkx_edges(G, pos, ax=ax, alpha=edge_alpha)
+    ax.set_axis_off()
+    return fig
+
+
+def plot_latents_3d(
+    latents: np.ndarray,
+    *,
+    cmap: str = "hsv",
+    ax=None,
+) -> Figure:
+    """3D latent trajectories, colored per condition.
+
+    latents shape: (n_conditions, n_time, n_dims >= 3).
+    """
+    import matplotlib
+    if ax is None:
+        fig = plt.figure(figsize=(6, 6))
+        ax = fig.add_subplot(111, projection="3d")
+    else:
+        fig = ax.figure
+    n_cond = latents.shape[0]
+    colors = matplotlib.colormaps[cmap].resampled(n_cond)
+    for i in range(n_cond):
+        ax.plot(latents[i, :, 0], latents[i, :, 1], latents[i, :, 2], color=colors(i))
+    ax.set_xlabel("PC1")
+    ax.set_ylabel("PC2")
+    ax.set_zlabel("PC3")
+    return fig
