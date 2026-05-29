@@ -27,7 +27,7 @@ def load_or_compute(name: str, *, root: Path | str | None = None, fn) -> dict:
     """Load <root>/<name>.npz if it exists; else call fn(), save its result, and return it."""
     path = _resolve_root(root) / f"{name}.npz"
     if path.exists():
-        with np.load(path) as data:
+        with np.load(path, allow_pickle=True) as data:
             return {k: data[k].copy() for k in data.files}
     result = fn()
     if not isinstance(result, dict):

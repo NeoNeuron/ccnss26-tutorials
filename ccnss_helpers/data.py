@@ -40,6 +40,9 @@ def load_allen_session(
     spike_times = {uid: np.asarray(session.spike_times[uid]) for uid in good.index}
     stim = session.stimulus_presentations
     stim = stim[stim["stimulus_name"] == "drifting_gratings"]
+    # Drop blank sweeps: Allen SDK stores "null" (str) for blank-sweep orientation
+    # in pandas 2.x; keep only rows with numeric orientation values.
+    stim = stim[pd.to_numeric(stim["orientation"], errors="coerce").notna()]
     return {
         "spike_times": spike_times,
         "units": good,
@@ -53,18 +56,20 @@ MC_MAZE_BIN_SIZE_S = 0.005
 
 
 def _open_nlb_nwb(cache_dir: Path):
-    """Download (if needed) and open the mc_maze_small NWB file."""
+    """Download (if needed) and open the mc_maze_small NWB train file."""
     from dandi.download import download
     cache_dir = Path(cache_dir)
     cache_dir.mkdir(parents=True, exist_ok=True)
     target = cache_dir / "mc_maze_small.nwb"
     if not target.exists():
         download(f"https://dandiarchive.org/dandiset/{MC_MAZE_DANDISET}", str(cache_dir))
-        # dandi creates a subfolder; flatten to known location.
+        # dandi creates a subfolder; prefer the train file (has behavior data).
         nwbs = list(cache_dir.rglob("*.nwb"))
         if not nwbs:
             raise FileNotFoundError("DANDI download did not yield an NWB file")
-        nwbs[0].rename(target)
+        # Pick the behavior+ecephys (train) file; fall back to first found.
+        train = next((p for p in nwbs if "behavior" in p.name), nwbs[0])
+        train.rename(target)
     from pynwb import NWBHDF5IO
     io = NWBHDF5IO(str(target), "r")
     return io.read()
@@ -97,17 +102,40 @@ def load_mc_maze_small(*, cache_dir: Path | str = "/content/nlb_cache") -> dict:
 
 
 def _extract_nlb_arrays(nwb):
-    """Real-NWB extraction. Reference: NeuralLatentsBenchmark/nlb_tools."""
-    from nlb_tools.nwb_interface import NWBDataset
-    ds = NWBDataset(str(nwb), split_heldout=False)
-    ds.resample(int(MC_MAZE_BIN_SIZE_S * 1000))  # ms
-    trial_data = ds.make_trial_data(align_field="move_onset_time", align_range=(-250, 450))
-    spike_cols = [c for c in trial_data.columns if c.startswith("spikes_")]
-    n_neurons = len(spike_cols)
-    grouped = trial_data.groupby("trial_id")
-    n_trials = len(grouped)
-    n_bins = trial_data.groupby("trial_id").size().iloc[0]
-    binned = trial_data[spike_cols].to_numpy().reshape(n_trials, n_bins, n_neurons)
-    hand = trial_data[["hand_pos_x", "hand_pos_y"]].to_numpy().reshape(n_trials, n_bins, 2)
-    directions = ds.trial_info.loc[grouped.groups.keys(), "trial_type"].to_numpy()
+    """Direct pynwb extraction — bypasses nlb_tools for pandas 2.x compatibility."""
+    bin_s = MC_MAZE_BIN_SIZE_S
+    pre_s, post_s = 0.250, 0.450          # window around move_onset_time
+    n_bins = int(round((pre_s + post_s) / bin_s))
+
+    trials = nwb.trials.to_dataframe()
+    # Use only held-in neurons
+    unit_df = nwb.units.to_dataframe()
+    held_in_mask = ~unit_df["heldout"] if "heldout" in unit_df.columns else np.ones(len(unit_df), dtype=bool)
+    spike_times_list = [np.asarray(st) for st, keep
+                        in zip(unit_df["spike_times"], held_in_mask) if keep]
+    n_neurons = len(spike_times_list)
+
+    # Continuous hand position (timestamps + data)
+    hand_ts = nwb.processing["behavior"]["hand_pos"]
+    hand_t = np.asarray(hand_ts.timestamps)
+    hand_xy = np.asarray(hand_ts.data)     # (T, 2)
+
+    directions = trials["trial_type"].to_numpy().astype(int)
+    onset_times = trials["move_onset_time"].to_numpy(dtype=float)
+
+    binned = np.zeros((len(trials), n_bins, n_neurons), dtype=np.int64)
+    hand = np.zeros((len(trials), n_bins, 2), dtype=np.float32)
+
+    for i, (onset, _) in enumerate(zip(onset_times, trials.itertuples())):
+        t0 = onset - pre_s
+        edges = np.linspace(t0, t0 + n_bins * bin_s, n_bins + 1)
+        # Bin spikes for each neuron
+        for j, st in enumerate(spike_times_list):
+            counts, _ = np.histogram(st, bins=edges)
+            binned[i, :, j] = counts
+        # Interpolate hand position at bin centres
+        bin_centres = 0.5 * (edges[:-1] + edges[1:])
+        hand[i, :, 0] = np.interp(bin_centres, hand_t, hand_xy[:, 0])
+        hand[i, :, 1] = np.interp(bin_centres, hand_t, hand_xy[:, 1])
+
     return binned, directions, hand
