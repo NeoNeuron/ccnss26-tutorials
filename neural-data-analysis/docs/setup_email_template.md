@@ -22,4 +22,4 @@ Next week we'll run two 45-min Colab tutorials on neural data analysis (Allen Ne
 - Warm-up notebook → <colab link>
 
 See you next week!
-Kai & Indra
+Kai
