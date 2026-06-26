@@ -1,0 +1,17 @@
+numpy==1.26.4
+scipy>=1.11
+matplotlib>=3.8
+pandas==2.2.2
+scikit-learn>=1.2
+networkx>=3.0
+Cython
+ipykernel
+dandi
+pynwb
+nbformat
+nbconvert
+pytest
+# Packages with stale constraints incompatible with Python 3.12 — install with --no-deps:
+#   pip install Cython && pip install --no-build-isolation "ssm @ git+https://github.com/lindermanlab/ssm.git@master"
+#   pip install allensdk --no-deps
+#   pip install nlb-tools --no-deps
