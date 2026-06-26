@@ -30,26 +30,30 @@ uv venv --python 3.12 .venv
 source .venv/bin/activate
 
 # ── 3. Build-time prereqs for ssm ─────────────────────────────────────────────
+# numpy and Cython must be present in the build env before ssm's C extensions
+# are compiled (--no-build-isolation lets ssm see them at build time).
 echo ""
 echo "=== Installing numpy 1.26.4 + Cython + setuptools (build deps for ssm) ==="
 uv pip install "numpy==1.26.4" Cython setuptools
 
 # ── 4. ssm (Linderman lab HMM library — compiled from source) ─────────────────
-# Requires numpy + Cython already present in the build env (hence --no-build-isolation).
 echo ""
 echo "=== Installing ssm from GitHub (~3 min) ==="
 uv pip install --no-build-isolation \
-    "ssm @ git+https://github.com/lindermanlab/ssm.git@master"
+    "ssm @ git+https://github.com/lindermanlab/ssm.git@master" \
+    --override <(echo "numpy==1.26.4")
 
-# ── 5. Core tutorial requirements ─────────────────────────────────────────────
+# ── 5. Core requirements ───────────────────────────────────────────────────────
 echo ""
 echo "=== Installing core requirements ==="
 uv pip install -r requirements.txt
 
 # ── 6. allensdk — bypass stale numpy<1.24 / pandas==1.5.3 / scipy<1.11 pins ──
-# Install with --no-deps then add its actual runtime requirements manually.
+# allensdk's version constraints predate Python 3.12 / Apple Silicon; the actual
+# code runs correctly with the modern versions installed above.
+# Install with --no-deps to skip the resolver, then add runtime deps manually.
 echo ""
-echo "=== Installing allensdk (--no-deps to bypass stale version pins) ==="
+echo "=== Installing allensdk (--no-deps, runtime deps added below) ==="
 uv pip install allensdk --no-deps
 uv pip install \
     SimpleITK \
@@ -72,7 +76,7 @@ uv pip install \
 
 # ── 7. nlb-tools — bypass stale pandas<=1.3.4 pin ────────────────────────────
 echo ""
-echo "=== Installing nlb-tools (--no-deps to bypass stale version pins) ==="
+echo "=== Installing nlb-tools (--no-deps to bypass stale pandas pin) ==="
 uv pip install nlb-tools --no-deps
 
 # ── 8. Local helper package ────────────────────────────────────────────────────
