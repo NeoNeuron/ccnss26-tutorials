@@ -33,26 +33,28 @@ ccnss26-tutorials/
     └── scripts/                  # MATLAB reference scripts (.m)
 ```
 
-## Quick start (local)
+## Quick start (local — no Anaconda required)
+
+`setup_env.sh` uses [uv](https://github.com/astral-sh/uv) to download Python 3.12
+and install all packages into an isolated `.venv/`. You do **not** need Anaconda,
+Miniconda, or a pre-existing Python installation.
 
 ```bash
-# Creates a Python 3.12 venv, installs everything, registers a Jupyter kernel.
-bash setup_env.sh
-source .venv/bin/activate
+bash setup_env.sh          # downloads Python 3.12 + all packages (~5–10 min)
+source .venv/bin/activate  # activate the env (run this at the start of each session)
+jupyter notebook           # then select kernel: CCNSS 2026
 ```
 
-Or, minimally:
-
-```bash
-pip install -r requirements.txt
-pip install -e neural-data-analysis/      # for the ccnss_helpers package
-```
+> **First time only:** if `uv` is not installed, the script installs it automatically
+> via `curl`. On subsequent runs `setup_env.sh` is a fast no-op (packages are cached).
 
 ## Quick start (Google Colab)
 
-The neural-data-analysis notebooks are Colab-ready — see
-[neural-data-analysis/README.md](neural-data-analysis/README.md) for the launch
-badges and session schedule.
+Open any notebook directly from GitHub in Colab, then **run the first cell** — it
+detects Colab automatically and installs all dependencies (~10 min first run).
+
+**Plasticity notebooks** (`demo1`–`demo4`) only use numpy / matplotlib / scikit-learn,
+which are pre-installed in Colab — no setup cell needed.
 
 ## TA
 
