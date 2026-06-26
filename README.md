@@ -50,10 +50,29 @@ jupyter notebook           # then select kernel: CCNSS 2026
 
 ## Quick start (Google Colab)
 
-Open any notebook directly from GitHub in Colab, then **run the first cell** — it
+Open any notebook directly from GitHub in Colab.
+Before running the code, CLICK **Save a copy in Drive** for tracking your package installation and your own code edits.
+
+### neural-data-analysis
+
+|section|notebook|
+|---|---|
+|session 1|[![Open Session 1 in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NeoNeuron/ccnss26-tutorials/blob/main/neural-data-analysis/notebooks/session1_coding_and_networks.ipynb)|
+|session 2|[![Open Session 2 in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NeoNeuron/ccnss26-tutorials/blob/main/neural-data-analysis/notebooks/session2_dynamics_and_states.ipynb)|
+
+Then **run the first cell** — it
 detects Colab automatically and installs all dependencies (~10 min first run).
 
-**Plasticity notebooks** (`demo1`–`demo4`) only use numpy / matplotlib / scikit-learn,
+### synaptic-plasticity and learning
+
+|section|notebook|
+|---|---|
+|demo 1|[![Open Session 1 in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NeoNeuron/ccnss26-tutorials/blob/main/plasticity-tutorial/notebooks/demo1_oja_pca.ipynb)|
+|demo 2|[![Open Session 2 in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NeoNeuron/ccnss26-tutorials/blob/main/plasticity-tutorial/notebooks/demo2_eghr_ica.ipynb)|
+|demo 3|[![Open Session 3 in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NeoNeuron/ccnss26-tutorials/blob/main/plasticity-tutorial/notebooks/demo3_td_reaching.ipynb)|
+|demo 4|[![Open Session 4 in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NeoNeuron/ccnss26-tutorials/blob/main/plasticity-tutorial/notebooks/demo4_td_dopamine.ipynb)|
+
+`demo1`–`demo4` only use numpy / matplotlib / scikit-learn,
 which are pre-installed in Colab — no setup cell needed.
 
 ## TA

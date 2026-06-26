@@ -53,7 +53,7 @@ echo "=== Installing allensdk (--no-deps to bypass stale version pins) ==="
 uv pip install allensdk --no-deps
 uv pip install \
     SimpleITK \
-    "xarray<2023.2.0" \
+    xarray \
     simplejson \
     nest-asyncio \
     psycopg2-binary \
