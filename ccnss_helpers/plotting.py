@@ -10,9 +10,15 @@ def plot_raster(
     *,
     t_start: float | None = None,
     t_end: float | None = None,
+    colors="black",
     ax=None,
+    eventplot_kwargs: dict | None = None,
 ) -> Figure:
-    """Spike raster. spike_times maps unit_id -> 1D array of spike times (s)."""
+    """Spike raster. spike_times maps unit_id -> 1D array of spike times (s).
+
+    colors: a single matplotlib color applied to every unit, or a dict mapping
+    unit_id -> color (e.g. to color each unit by the brain area it came from).
+    """
     if ax is None:
         fig, ax = plt.subplots(figsize=(8, 4))
     else:
@@ -22,9 +28,12 @@ def plot_raster(
             spikes = spikes[spikes >= t_start]
         if t_end is not None:
             spikes = spikes[spikes <= t_end]
-        ax.eventplot(spikes, lineoffsets=row, linelengths=0.8, colors="black")
-    ax.set_xlabel("Time (s)")
-    ax.set_ylabel("Unit")
+        color = colors[uid] if isinstance(colors, dict) else colors
+        default_kwargs = dict(lineoffsets=row, linewidths=0.8, linelengths=10, colors=color)
+        default_kwargs.update(eventplot_kwargs or {})
+        ax.eventplot(spikes, **default_kwargs)
+    ax.set_xlabel("Time (s)", fontsize=16)
+    ax.set_ylabel("Unit", fontsize=16)
     ax.set_yticks(range(len(spike_times)))
     ax.set_yticklabels(list(spike_times.keys()))
     if t_start is not None and t_end is not None:

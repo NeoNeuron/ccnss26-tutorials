@@ -7,7 +7,7 @@ from __future__ import annotations
 from pathlib import Path
 import numpy as np
 
-DEFAULT_ROOT = Path("/content/checkpoints")
+DEFAULT_ROOT = Path("./checkpoints")
 
 
 def _resolve_root(root: Path | str | None) -> Path:
