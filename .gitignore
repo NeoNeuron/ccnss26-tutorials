@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Jupyter
+*.ipynb_meta
+.jupyter/
+
+# Virtual environments
+.venv/
+venv/
+
+# macOS
+.DS_Store
+~$*
+
+# Colab / data caches
+/content/
+cache/
+checkpoints/
+*.nwb
+*.h5
+*.npz
+
+# Editor / agent
+CLAUDE.md
+.claude/

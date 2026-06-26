@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Set up a Python 3.12 virtual environment for CCNSS 2026 neural data analysis.
+# Set up a Python 3.12 virtual environment for the CCNSS 2026 tutorials
+# (neural data analysis + synaptic plasticity).
 # Run from the repo root: bash setup_env.sh
 set -e
 
@@ -30,8 +31,8 @@ pip install allensdk --no-deps
 echo "=== Step 6: nlb-tools (installed --no-deps: declares pandas<=1.3.4) ==="
 pip install nlb-tools --no-deps
 
-echo "=== Step 7: ccnss_helpers package ==="
-pip install -e .
+echo "=== Step 7: ccnss_helpers package (neural data analysis tutorial) ==="
+pip install -e neural-data-analysis/
 
 echo "=== Step 8: register Jupyter kernel ==="
 pip install ipykernel
@@ -39,5 +40,5 @@ python -m ipykernel install --user --name ccnss2026 --display-name "CCNSS 2026 (
 
 echo ""
 echo "=== Done! Activate with: source $VENV/bin/activate ==="
-echo "=== Run fast tests:       pytest tests/ -k 'not notebook' ==="
-echo "=== Run notebooks locally: python scripts/run_notebook_local.py solutions/session1_solutions.ipynb ==="
+echo "=== Run fast tests:       pytest neural-data-analysis/tests/ -k 'not notebook' ==="
+echo "=== Run notebooks locally: python neural-data-analysis/scripts/run_notebook_local.py neural-data-analysis/solutions/session1_solutions.ipynb ==="
