@@ -7,8 +7,8 @@ Hands-on tutorials for CCNSS 2026, combining two tracks:
   correlations → functional networks; NLB MC_Maze PCA → linear dynamical
   systems → hidden Markov models).
 - **[plasticity-tutorial/](plasticity-tutorial/)** — synaptic plasticity demos
-  (Oja's rule / PCA receptive fields, EGHR / ICA, and TD-learning for reaching
-  and dopamine).
+  (Oja's rule / PCA receptive fields, EGHR / ICA, and TD-learning for dopamine
+  and reaching).
 
 Each track keeps its own `notebooks/` and utility scripts; the Python
 environment is shared and set up from the repo root.
@@ -69,8 +69,8 @@ detects Colab automatically and installs all dependencies (~10 min first run).
 |---|---|
 |demo 1|[![Open Session 1 in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NeoNeuron/ccnss26-tutorials/blob/main/plasticity-tutorial/notebooks/demo1_oja_pca.ipynb)|
 |demo 2|[![Open Session 2 in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NeoNeuron/ccnss26-tutorials/blob/main/plasticity-tutorial/notebooks/demo2_eghr_ica.ipynb)|
-|demo 3|[![Open Session 3 in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NeoNeuron/ccnss26-tutorials/blob/main/plasticity-tutorial/notebooks/demo3_td_reaching.ipynb)|
-|demo 4|[![Open Session 4 in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NeoNeuron/ccnss26-tutorials/blob/main/plasticity-tutorial/notebooks/demo4_td_dopamine.ipynb)|
+|demo 3|[![Open Session 3 in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NeoNeuron/ccnss26-tutorials/blob/main/plasticity-tutorial/notebooks/demo3_td_dopamine.ipynb)|
+|demo 4|[![Open Session 4 in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NeoNeuron/ccnss26-tutorials/blob/main/plasticity-tutorial/notebooks/demo4_td_reaching.ipynb)|
 
 `demo1`–`demo4` only use numpy / matplotlib / scikit-learn,
 which are pre-installed in Colab — no setup cell needed.
