@@ -61,12 +61,8 @@ uv pip install \
     simplejson \
     nest-asyncio \
     psycopg2-binary \
-    pynrrd \
     future \
     requests-toolbelt \
-    scikit-image \
-    statsmodels \
-    seaborn \
     "marshmallow<4.0.0" \
     argschema \
     boto3 \
